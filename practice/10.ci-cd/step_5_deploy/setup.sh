@@ -47,7 +47,7 @@ then
         metadata:
           name: $CI_PROJECT_PATH_SLUG-$CI_ENVIRONMENT_NAME
         rules:
-        - apiGroups: ["", "extensions", "apps", "certmanager.k8s.io"]
+        - apiGroups: ["", "extensions", "apps", "certmanager.k8s.io", "cert-manager.io"]
           resources: ["*"]
           verbs: ["*"]
 EOF
