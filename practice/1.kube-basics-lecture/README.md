@@ -358,6 +358,36 @@ my-deployment-5b47d48b58-l4t67
 ```
 HE! чистим за собой кластер
 
+### Secret
+
+Редактируем деплоймент, подключаем секрет как переменную окружения
+```
+vi deployment-with-configmap.yaml
+
+env:
+- name: TEST
+  value: foo
+- name: TEST_1
+  valueFrom:
+    secretKeyRef:
+      name: test
+      key: test1
+```
+
+Создаем секрет
+```
+kubectl create secret generic test --from-literal=test1=asdf
+
+kubectl get secret
+
+kubectl get secret test -o yaml
+```
+Применим наш деплоймент
+```
+kubectl apply -f deployment-with-configmap.yaml
+kubectl describe pod my-deployment-5b47d48b58-l4t67
+```
+
 ### Service
 
 Проверяем что лэйблы на наших подах совпадают с тем,
