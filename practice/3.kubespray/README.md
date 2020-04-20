@@ -83,7 +83,12 @@ kubectl label node ingress-1.s000000.slurm.io\node-role.kubernetes.io/node-
 
 > Добавляем поддержку автодополнения команд kubectl по нажатию <Tab>
 ```bash
-kubectl completion bash > \~/.kube/completion.bash.inc
+kubectl completion bash > ~/.kube/completion.bash.inc
 printf "source '$HOME/.kube/completion.bash.inc'" >> $HOME/.bash_profile
 source $HOME/.bash_profile
+```
+
+> По желанию добавляем в поддержку автодополнения alias k=kubectl
+```
+patch ~/.kube/completion.bash.inc < completion.bash.inc.diff
 ```
