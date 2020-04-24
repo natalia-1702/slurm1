@@ -9,12 +9,11 @@ sudo -s
 > Клонируем сценарий автоматизированной установки ceph в каталог /srv
 ```bash
 cd /srv
-git clone git@gitlab.slurm.io:slurm/ceph.git
+git clone git@gitlab.slurm.io:slurm/ceph-nautilus.git
 ```
 > Устанавливаем ansible и зависимости
 ```bash
 cd ceph
-pip install -r requirements.txt
 ```
 
 > Запускаем сценарий скриптом, который автоматически поправит инвентарь
@@ -26,6 +25,9 @@ sh  _deploy_cluster.sh
 
 > Если все хорошо, последний таск сценария покажет в выводе:
 `health: HEALTH_OK`
+
+> Если сообщение не HEALTH_OK - есть вероятность, что
+не все компоненты успели запустится, проверим позже на node-1.
 
 > Далее будем работать на двух серверах
 > node-1 и master-1
@@ -39,6 +41,7 @@ sudo -s
 
 ```bash
 ceph health
+ceph -s
 ```
 
 ## Создаем пул в цефе для RBD дисков
