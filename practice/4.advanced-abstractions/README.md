@@ -13,7 +13,7 @@ kubectl apply -f daemonset.yaml
 ```
 В ответ должны увидеть
 ```bash
-daemonset.extensions/node-exporter created
+daemonset.apps/node-exporter created
 ```
 Смотрим на поды
 ```bash
