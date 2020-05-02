@@ -4,7 +4,7 @@
 >group_vars/k8s-cluster/k8s-cluster.yml
 
 ```
-kube_version: v1.15.3
+kube_version: v1.16.9
 ```
 
 >Исправляем путь к инвентарю в скрипте _upgrade_cluster.sh (000 меняем на номер студента)
