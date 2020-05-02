@@ -15,7 +15,6 @@ git clone https://github.com/southbridgeio/kubespray
 > Устанавливаем ansible и зависимости
 ```bash
 cd kubespray
-yum install -y sshpass
 pip install -r requirements.txt
 ```
 

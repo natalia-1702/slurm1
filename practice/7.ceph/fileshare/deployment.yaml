@@ -64,12 +64,6 @@ spec:
         configMap:
           name: fileshare
       - name: data
-        cephfs:
-          monitors:
-            - 172.21.0.5:6789
-            - 172.21.0.6:6789
-            - 172.21.0.7:6789
-          path: /data_path
-          user: username
-          secretRef:
-            name: cephfs-secret-username
+        persistentVolumeClaim:
+          claimName: fileshare
+          readOnly: false

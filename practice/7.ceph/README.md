@@ -9,11 +9,13 @@ sudo -s
 > Клонируем сценарий автоматизированной установки ceph в каталог /srv
 ```bash
 cd /srv
-git clone git@gitlab.slurm.io:slurm/ceph-nautilus.git
+git clone git@gitlab.slurm.io:mcs/mega/ceph-nautilus.git
 ```
 > Устанавливаем ansible и зависимости
 ```bash
-cd ceph
+cd ceph-nautilus
+
+pip install -r requirements.txt
 ```
 
 > Запускаем сценарий скриптом, который автоматически поправит инвентарь
@@ -51,124 +53,293 @@ ceph -s
 ceph osd pool create kube 32
 ceph osd pool application enable kube kubernetes
 ```
-> создаем секрет с ключом админа в кубе
-> смотрим ключ админа в цеф
-> node-1
-```bash
-ceph auth get-key client.admin
+
+## Устанавливаем ceph CSI driver для RBD
+
+
+> Добавляем репозиторий с чартом, получаем набор переменных чарта ceph-csi-rbd
+
+```
+helm repo add ceph-csi https://ceph.github.io/csi-charts
+
+mkdir -p /srv/ceph
+cd /srv/ceph
+
+helm inspect values ceph-csi/ceph-csi-rbd --version 2.1.0 >cephrbd.yml
 ```
 
-> вывод:
- AQB8x9Jbk8RFKhAAfNVrIka3hlktspJUV9tnlw==
+> Заполняем переменные в cephrbd.yml
 
-> выполняем на master-1, подставляем значение ключа в создание секрета
-> Если секрет был уже создан ранее и вы хотите его изменить, самый простой способ - удалить и создать заново
+> Выполняем на node-1, чтобы узнать необходимые параметры:
 
 ```bash
-# kubectl delete secret ceph-secret --namespace=kube-system
-kubectl create secret generic ceph-secret --type="kubernetes.io/rbd" --from-literal=key='xxxxxxxxxxxxxxxxxxxx==' --namespace=kube-system
+#  - clusterID: "<cluster-id>"
+
+ceph fsid
 ```
+```bash
+#     monitors:
+#       - "<MONValue1>"
+#       - "<MONValue2>"
+
+ceph mon dump
+```
+
+> Правим файл cephrbd.yml
+> Заносим свои значение clusterID, и адреса мониторов.
+> включаем создание политик PSP, и увеличиваем таймаут на создание дисков
+
+```
+csiConfig:
+  - clusterID: "bcd0d202-fba8-4352-b25d-75c89258d5ab"
+    monitors:
+      - "v2:172.18.8.15:3300/0,v1:172.18.8.15:6789/0"
+      - "v2:172.18.8.16:3300/0,v1:172.18.8.16:6789/0"
+      - "v2:172.18.8.17:3300/0,v1:172.18.8.17:6789/0"
+
+nodeplugin:
+  podSecurityPolicy:
+    enabled: true
+
+provisioner:
+  replicaCount: 1
+  timeout: 260s
+  podSecurityPolicy:
+    enabled: true
+```
+
+> При необходимости можно сверится с файлом rbd/cephrbd-values-example.yml
+
+> Устанавливаем чарт
+
+```
+kubectl create ns ceph-csi-rbd
+helm upgrade -i ceph-csi-rbd ceph-csi/ceph-csi-rbd -f cephrbd.yml -n ceph-csi-rbd
+```
+
+> Заходим в каталог с практикой и далее переходим в каталог rbd
+> Правим манифесты:
 
 >
 > Создаем пользователя в ceph, с правами записи в пул kube
 > Возвращаемся на node-1
 
 ```bash
-ceph auth get-or-create client.user mon 'allow r, allow command "osd blacklist"' osd 'allow rwx pool=kube'
+ceph auth get-or-create client.rbdkube mon 'allow r, allow command "osd blacklist"' osd 'allow rwx pool=kube'
 ```
 
+> Посмотреть ключ доступа для пользователя ceph
+
 ```bash
-ceph auth get-key client.user
+ceph auth get-key client.rbdkube
 ```
 
 > вывод:
 AQCO9NJbhYipKRAAMqZsnqqS/T8OYQX20xIa9A==
 
-> выполняем на master-1, подставляем значение ключа в создание секрета
+> выполняем на master-1, подставляем значение ключа в манифест секрета секрета
 > Если секрет был уже создан ранее и вы хотите его изменить, самый простой способ - удалить и создать заново
 
 ```bash
-# kubectl delete secret ceph-secret-user --namespace=default
-kubectl create secret generic ceph-secret-user --type="kubernetes.io/rbd" --from-literal=key='yyyyyyyyyyyyyyyyyyyyyyyyyyy==' --namespace=default
+vi secret.yaml
+# Заносим значение ключа в 
+# userKey: AQBRYK1eo++dHBAATnZzl8MogwwqP/7KEnuYyw==
+
+# Создаем секрет
+
+kubectl apply -f secret.yaml
 ```
 
-> создаем StorageClass
->Редактируем файл sc.yml, в этом файле правим сеть у адресов мониторов
-parameters:
-  monitors: 172.xx.xxx.5:6789, 172.xx.xxx.6:6789, 172.xx.xxx.7:6789
-
->В поле userId: я уже указал имя пользователя user
-
-> Команды с kubectl delete удаляют существующий объект, чтобы можно было создать новый
-> Аналогично с изменением storageclass - удаляем и создаем заново
-> sc.yml лежит в каталоге с практикой practice/7.ceph
-> master-1
-
-```bash
-# kubectl delete sc kube
-kubectl apply -f sc.yml
-```
-
-> Проверяем что создался sc
-```bash
-kubectl get sc
-```
 >
-> Создаем pvc
-> в файле pvc.yml лежит манифест для PersistenceVolumeClaim
-> pvc.yml лежит в каталоге с практикой practice/7.ceph
-> на master-1
+> Создаем storage class
+> Выполняем на node-1
 
 ```bash
-kubectl apply -f pvc.yml --namespace=default
+# Получам id кластера ceph
+
+ceph fsid
 ```
-> команды диагностики:
-> запускать на master-1
 
-> посмотреть список созданных PersistentVolume
+> Выполняем на master-1
+
+```
+# Заносим clusterid в storageclass.yaml
+vi storageclass.yaml
+# clusterID: bcd0d202-fba8-4352-b25d-75c89258d5ab
+
+kubectl apply -f storageclass.yaml
+```
+
+> Проверяем как работает.
+> Создаем pvc, и проверем статус и наличие pv
+
 ```bash
+kubectl apply -f pvc.yaml
+
+kubectl get pvc
 kubectl get pv
 ```
-> посмотреть на ошибки создания тома
+
+> Проверяем создание тома в цеф
+> Выполняем на node-1
+
 ```bash
-kubectl describe pvc prometheus-3gb --namespace=default
+# список томов в пуле kube
+rbd ls -p kube
+
+# информация о созданном томе
+rbd -p kube info csi-vol-eb3d257d-8c6c-11ea-bff5-6235e7640653
 ```
 
-> Самая основная проблема была такая:
->в describe pvc было вот такое написано:
->  Warning    ProvisioningFailed  3s                    persistentvolume-controller  Failed to provision volume with StorageClass "kube": failed to get admin secret from ["kube-system"/"ceph-secret"]: failed to get secret from ["kube-system"/"ceph-secret"]
-
->Помогло удаление секрета админа и создание его заново.
-
-> остальные ошибки были из-за проблем с указанием не тех ip адресов мониторам или не тех username для admin и user
-
-## Создание пула для Cephfs не требуется. оба пула были созданы сценарием ceph-ansible
-
-## Подключим том типа cephfs вручную
-
-> Делаем на node-1
-> Создаем каталог, в команде монтирования правим сеть у адресов мониторов
-> в 172.xx.xxx.6
+> Пробуем как работает resize
+> Изменяем размер тома в манифесте pvc.yaml
 
 ```bash
+vi pvc.yml
+
+resources:
+  requests:
+    storage: 1Gi
+```
+
+----------------------------
+## Устанавливаем ceph CSI driver для CephFS
+
+```
+cd /srv/ceph
+
+helm inspect values ceph-csi/ceph-csi-cephfs --version 2.1.0 >cephfs.yml
+```
+
+> Заполняем переменные в cephfs.yml
+
+> Выполняем на node-1, чтобы узнать необходимые параметры:
+
+```bash
+#  - clusterID: "<cluster-id>"
+
+ceph fsid
+```
+```bash
+#     monitors:
+#       - "<MONValue1>"
+#       - "<MONValue2>"
+
+ceph mon dump
+```
+
+> Правим файл cephfs.yml
+> Заносим свои значение clusterID, и адреса мониторов.
+> включаем создание политик PSP, и увеличиваем таймаут на создание дисков
+
+> !!! Внимание, адреса мониторов указываются в простой форме адреc:порт, потому что они передаются в модуль ядра для монтирования cephfs на узел.
+> !!! А модуль ядра еще не умеет работать с протоколом мониторов v2
+
+```
+csiConfig:
+  - clusterID: "bcd0d202-fba8-4352-b25d-75c89258d5ab"
+    monitors:
+      - "172.18.8.15:6789"
+      - "172.18.8.16:6789"
+      - "172.18.8.17:6789"
+
+nodeplugin:
+  podSecurityPolicy:
+    enabled: true
+
+provisioner:
+  replicaCount: 1
+  timeout: 260s
+  podSecurityPolicy:
+    enabled: true
+```
+
+> При необходимости можно сверится с файлом cephfs/cephfs-values-example.yml
+
+> Устанавливаем чарт
+
+```
+kubectl create ns ceph-csi-cephfs
+helm upgrade -i ceph-csi-cephfs ceph-csi/ceph-csi-cephfs -f cephfs.yml -n ceph-csi-cephfs
+```
+
+> Заходим в каталог с практикой и далее переходим в каталог cephfs
+> Правим манифесты:
+
+>
+> Провизионер для CephFS создает отдельных пользователей для каждого pv, поэтому ему нужны права администратора в кластере ceph
+> Возвращаемся на node-1
+
+> Посмотреть ключ доступа для пользователя admin
+
+```bash
+ceph auth get-key client.admin
+```
+
+> вывод:
+AQCO9NJbhYipKRAAMqZsnqqS/T8OYQX20xIa9A==
+
+> выполняем на master-1, подставляем значение ключа в манифест секрета секрета
+> Если секрет был уже создан ранее и вы хотите его изменить, самый простой способ - удалить и создать заново
+
+```bash
+vi secret.yaml
+# Заносим значение ключа в 
+# adminKey: AQBRYK1eo++dHBAATnZzl8MogwwqP/7KEnuYyw==
+
+# Создаем секрет
+
+kubectl apply -f secret.yaml
+```
+
+>
+> Создаем storage class
+> Выполняем на node-1
+
+```bash
+# Получам id кластера ceph
+
+ceph fsid
+```
+
+> Выполняем на master-1
+
+```
+# Заносим clusterid в storageclass.yaml
+vi storageclass.yaml
+# clusterID: bcd0d202-fba8-4352-b25d-75c89258d5ab
+
+kubectl apply -f storageclass.yaml
+```
+
+> Проверяем как работает.
+> Создаем pvc, и проверем статус и наличие pv
+
+```bash
+kubectl apply -f pvc.yaml
+
+kubectl get pvc
+kubectl get pv
+```
+
+> Проверяем создание каталога в cephfs
+> Выполняем на node-1
+
+```bash
+# Точка монтирования
 mkdir -p /mnt/cephfs
-mount.ceph 172.21.0.6:/ /mnt/cephfs -o name=admin,secret=`ceph auth get-key client.admin`
-mkdir -p /mnt/cephfs/data_path
+
+# Создаем файл с ключом администратора
+ceph auth get-key client.admin >/etc/ceph/secret.key
+
+# Добавляем запсиь в /etc/fstab
+# !! Изменяем ip адрес на адрес узла node-1
+echo "172.18.8.16:6789:/ /mnt/cephfs ceph name=admin,secretfile=/etc/ceph/secret.key,noatime,_netdev    0       2">>/etc/fstab
+
+mount /mnt/cephfs
 ```
 
-## Создаем пользователя и секреты для доступа к cephfs
-> Делаем на node-1
-
-```bash
-ceph auth get-or-create client.username mon 'allow r' mds 'allow r, allow rw path=/data_path' osd 'allow rw pool=cephfs_data' 
-```
-
-> команда вернет ключ доступа пользователя
-
-> Делаем на master-1
-```bash
-kubectl create secret  generic cephfs-secret-username --from-literal=key='ключ доступа пользователя username' --namespace default
-```
+> Идем в каталог /mnt/cephfs и смотрим что там есть
 
 ## Деплоим приложение fileshare
 
@@ -178,7 +349,6 @@ kubectl create secret  generic cephfs-secret-username --from-literal=key='клю
 cd fileshare
 ```
 в ingress.yml host: номер своего студента
-в deployment.yml: в описании тома data типа cephfs - ставим ip адреса своих серверов mon ceph. (подставляем свою сеть)
 
 ```bash
 kubectl apply -f .
@@ -190,7 +360,7 @@ kubectl get pod
 ```
 > Если какие то проблемы - то смотрим describe пода
 ```bash
-kubectl describe названиепода
+kubectl describe pod названиепода
 ```
 
 Пробуем загрузить файл
@@ -198,61 +368,27 @@ kubectl describe названиепода
 curl -i fileshare.s<номер своего логина>.edu.slurm.io/files/ -T configmap.yaml
 ```
 
-Идем на node-1 и в каталоге /mnt/cephfs/data_path убеждаемся, что там появился файл configmap.yaml
+Идем на node-1 и в каталоге /mnt/cephfs/pvc-........ убеждаемся, что там появился файл configmap.yaml
 
 
-## Установка CephFS provisioner
-
-> Добавляем репо sb с чартами, получаем переменные чарта и правим их
-
-```bash
-helm repo add sb https://charts.southbridge.ru 
-helm inspect values sb/cephfs-provisioner > values.yaml
-
-> также меняем сеть в адресах мониторов
-
-vim values.yaml
-```
-<<<<<<<<<<<
-```yaml
-adminSecretName: ceph-secret-admin
-monitors:
-  - 172.21.0.5:6789
-  - 172.21.0.6:6789
-  - 172.21.0.7:6789
-```
-
-## Создаем секрет с ключом администратора ceph и ставим провизионер
-
-> на node-1
-```bash
-ceph auth get-key client.admin
-```
-> на master-1
+> Пробуем как работает resize
+> Изменяем размер тома в манифесте pvc.yaml
 
 ```bash
-kubectl create secret generic ceph-secret-admin --namespace=kube-system  --from-literal=secret=XX
-helm upgrade --install cephfs-provisioner sb/cephfs-provisioner -f values.yaml  --namespace=kube-system 
+vi pvc.yml
+
+resources:
+  requests:
+    storage: 20Mi
 ```
-## Создаем pvc для cephfs
-> pvc-cephfs.yml лежит в каталоге с практикой practice/7.ceph
+
+> Ресайз отработает, но с фактическим изменением квот могут быть проблемы
+
+> Проверяем на node-1
 
 ```bash
-kubectl apply -f pvc-cephfs.yml
+yum install -y attr
+
+getfattr -n ceph.quota.max_bytes <каталог-с-данными>
 ```
-
-## Проверяем, что pv был создан
-
-```bash
-kubectl get pv
-```
-## Самостоятельная задача. Надо исправить deployment для fileshare, чтобы том data использовал pvc fileshare, а не подключался к cephfs напрямую
-
-> исправить, передеплоить и попробовать загрузить файл
-
-```
-curl -i fileshare.s<номер своего логина>.edu.slurm.io/files/ -T configmap.yaml
-```
-
-> Идем на node-1 и в каталоге /mnt/cephfs/k8s/default/fileshare убеждаемся, что там появился файл configmap.yaml
 

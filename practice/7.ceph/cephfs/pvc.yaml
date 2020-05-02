@@ -1,11 +1,12 @@
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: fileshare
+  name: csi-cephfs-pvc
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
-  storageClassName: cephfs-provisioner
+      storage: 5Gi
+  storageClassName: csi-cephfs-sc
