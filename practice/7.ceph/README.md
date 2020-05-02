@@ -14,8 +14,6 @@ git clone git@gitlab.slurm.io:slurm/ceph-nautilus.git
 > Устанавливаем ansible и зависимости
 ```bash
 cd ceph-nautilus
-
-pip install -r requirements.txt
 ```
 
 > Запускаем сценарий скриптом, который автоматически поправит инвентарь
