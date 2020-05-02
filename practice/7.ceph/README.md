@@ -9,7 +9,7 @@ sudo -s
 > Клонируем сценарий автоматизированной установки ceph в каталог /srv
 ```bash
 cd /srv
-git clone git@gitlab.slurm.io:mcs/mega/ceph-nautilus.git
+git clone git@gitlab.slurm.io:slurm/ceph-nautilus.git
 ```
 > Устанавливаем ansible и зависимости
 ```bash
