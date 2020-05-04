@@ -198,7 +198,33 @@ vi pvc.yml
 
 resources:
   requests:
-    storage: 1Gi
+    storage: 2Gi
+```
+
+> Немножко ждем и проверяем размер тома в ceph, pv, pvc
+
+```bash
+rbd -p kube info csi-vol-eb3d257d-8c6c-11ea-bff5-6235e7640653
+
+kubectl get pv
+kubectl get pvc
+```
+
+> У pvc размер не изменился, и если посмтреть его манифест в yaml
+
+```bash
+kubectl get pvc rbd-pvc -o yaml
+```
+
+> То увидим сообщение message: Waiting for user to (re-)start a pod to finish file system resize of volume on node.
+> type: FileSystemResizePending
+> Необходимо смонтировать том, для того чтобы увеличить на нем файловую систему. А у нас этот PVC/PV не используется никаким подом.
+> Создаем под, который использует этот PVC/PV, и смотри на размер, указанный в pvc
+
+```bash
+kubectl apply -f pod.yml
+
+kubectl get pvc
 ```
 
 ----------------------------
@@ -233,6 +259,8 @@ ceph mon dump
 
 > !!! Внимание, адреса мониторов указываются в простой форме адреc:порт, потому что они передаются в модуль ядра для монтирования cephfs на узел.
 > !!! А модуль ядра еще не умеет работать с протоколом мониторов v2
+
+> Список изменений в файле cephfs.yml. Опции в разделах nodeplugin и provisioner уже есть в файле, их надо исправить так как показано ниже.
 
 ```
 csiConfig:
@@ -390,4 +418,3 @@ yum install -y attr
 
 getfattr -n ceph.quota.max_bytes <каталог-с-данными>
 ```
-
