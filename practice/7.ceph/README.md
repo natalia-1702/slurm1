@@ -31,6 +31,9 @@ sh  _deploy_cluster.sh
 
 > Далее будем работать на двух серверах
 > node-1 и master-1
+> Все комадны `kubectl` выполняются на master-1
+> Команды `ceph` и `rbd` выполняются на node-1
+
 > С sbox заходим на node-1
 
 ```bash
@@ -92,9 +95,9 @@ ceph mon dump
 csiConfig:
   - clusterID: "bcd0d202-fba8-4352-b25d-75c89258d5ab"
     monitors:
-      - "v2:172.18.8.15:3300/0,v1:172.18.8.15:6789/0"
-      - "v2:172.18.8.16:3300/0,v1:172.18.8.16:6789/0"
-      - "v2:172.18.8.17:3300/0,v1:172.18.8.17:6789/0"
+      - "v2:172.18.8.5:3300/0,v1:172.18.8.5:6789/0"
+      - "v2:172.18.8.6:3300/0,v1:172.18.8.6:6789/0"
+      - "v2:172.18.8.7:3300/0,v1:172.18.8.7:6789/0"
 
 nodeplugin:
   podSecurityPolicy:
@@ -266,9 +269,9 @@ ceph mon dump
 csiConfig:
   - clusterID: "bcd0d202-fba8-4352-b25d-75c89258d5ab"
     monitors:
-      - "172.18.8.15:6789"
-      - "172.18.8.16:6789"
-      - "172.18.8.17:6789"
+      - "172.18.8.5:6789"
+      - "172.18.8.6:6789"
+      - "172.18.8.7:6789"
 
 nodeplugin:
   podSecurityPolicy:
@@ -361,7 +364,7 @@ ceph auth get-key client.admin >/etc/ceph/secret.key
 
 # Добавляем запсиь в /etc/fstab
 # !! Изменяем ip адрес на адрес узла node-1
-echo "172.18.8.16:6789:/ /mnt/cephfs ceph name=admin,secretfile=/etc/ceph/secret.key,noatime,_netdev    0       2">>/etc/fstab
+echo "172.<xx>.<yyy>.6:6789:/ /mnt/cephfs ceph name=admin,secretfile=/etc/ceph/secret.key,noatime,_netdev    0       2">>/etc/fstab
 
 mount /mnt/cephfs
 ```
