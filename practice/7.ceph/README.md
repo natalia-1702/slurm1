@@ -197,7 +197,7 @@ rbd -p kube info csi-vol-eb3d257d-8c6c-11ea-bff5-6235e7640653
 > Изменяем размер тома в манифесте pvc.yaml
 
 ```bash
-vi pvc.yml
+vi pvc.yaml
 
 resources:
   requests:
@@ -225,7 +225,7 @@ kubectl get pvc rbd-pvc -o yaml
 > Создаем под, который использует этот PVC/PV, и смотри на размер, указанный в pvc
 
 ```bash
-kubectl apply -f pod.yml
+kubectl apply -f pod.yaml
 
 kubectl get pvc
 ```
@@ -378,7 +378,7 @@ mount /mnt/cephfs
 ```bash
 cd fileshare
 ```
-в ingress.yml host: номер своего студента
+в ingress.yaml host: номер своего студента
 
 ```bash
 kubectl apply -f .
@@ -405,7 +405,7 @@ curl -i fileshare.s<номер своего логина>.edu.slurm.io/files/ -T
 > Изменяем размер тома в манифесте pvc.yaml
 
 ```bash
-vi pvc.yml
+vi pvc.yaml
 
 resources:
   requests:
