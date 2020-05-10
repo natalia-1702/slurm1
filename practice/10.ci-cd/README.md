@@ -1,4 +1,22 @@
-## Все работы проводим под рутом на master-1
+### Список практик
+
+[1. Build](1.build/README.md)
+
+[2. Test and cleanup](2.test_and_cleanup/README.md)
+
+[3. Push](3.push/README.md)
+
+[4.1 Prepare Cluster](4.deploy/4.1.prepare_cluster/README.md)
+
+[4.2 Deploy](4.deploy/4.2.deploy/README.md)
+
+### Все работы проводим под рутом на master-1
+
+Подключение к master-1 производится с сервера `sbox.slurm.io`. Для подлключения к master-1 выполните команду `sXXXXXX` на номер своего студента:
+
+```bash
+ssh master-1.sXXXXXX
+```
 
 ### Если ключ SSH еще не добавлен в Gitlab
 
@@ -23,103 +41,3 @@ https://gitlab.slurm.io/slurm/xpaste
 ```bash
 git clone git@gitlab.slurm.io:s<номер своего логина>/xpaste.git
 ```
-> и переходим в директорию проекта
-```bash
-cd xpaste
-```
-
-### Подготовка CI
-
-> Копируем файл из репозитория c практиками в директорию xpaste
-
-```bash
-cp ~/slurm/practice/10.ci-cd/step_5_deploy/.gitlab-ci.yml .
-```
-> Открываем скопированный файл и в нем правим
-```yaml
-  K8S_API_URL: <адрес своего мастера>
-```
-> на адрес вашего первого мастера.
-> Можно узнать выполнив на нем команду ip a
-> НИЧЕГО ПОКА НЕ КОММИТИМ И НЕ ПУШИМ!
-
-> Далее подготавливаем namespace и нужные RBAC объекты.
-> Для этого запускаем скрипт setup.sh
-```bash
-~/slurm/practice/10.ci-cd/step_5_deploy/setup.sh s<номер своего логина>-xpaste production
-```
-> В конце своего выполнения скрипт выдаст нам токен.
-> Его нужно скопировать.
-
-> После этого открываем в браузере свой форк xpaste.
-```bash
-https://gitlab.slurm.io/s<номер своего логина>/xpaste
-```
-> В левом меню находим Settings, далее CI/CD и далее Variables и нажимаем Expand
-> В левое поле вводим имя переменной
-```bash
-K8S_CI_TOKEN
-```
-> В правое поле вводим скопированный токен из вывода команды setup.sh
-> Protected не включаем!
-> И нажимаем Save variables
-
-> Далее в том же левом меню в Settings > Repository находим Deploy tokens и нажимаем Expand.
-> В поле Name вводим
-```bash
-k8s-pull-token
-```
-> И ставим галочку рядом с read_registry.
-> Все остальные поля оставляем пустыми.
-> Нажимаем Create deploy token.
-> НЕ ЗАКРЫВАЕМ ОКНО БРАУЗЕРА!
-
-> Возвращаемся в консоль на первом мастере
-> Создаем image pull secret для того чтобы кубернетис мог пулить имаджи из гитлаба
-```bash
-kubectl create secret docker-registry xpaste-gitlab-registry --docker-server registry.slurm.io --docker-email 'student@slurm.io' --docker-username '<первая строчка из окна создания токена в gitlab>' --docker-password '<вторая строчка из окна создания токена в gitlab>' --namespace s<номер своего логина>-xpaste-production
-```
-> Соответсвенно подставляя на место <> нужные параметры.
-
-### Установка PostgreSQL
-
-> Выполняем команду, заменяя <> на нужные значения
-```bash
-helm install ~/slurm/practice/10.ci-cd/step_5_deploy/postgresql --name postgresql --namespace s<номер своего логина>-xpaste-production --tiller-namespace s<номер своего логина>-xpaste-production --atomic --timeout 120
-```
-
-### Создание секрета для приложения
-
-> Выполняем команду
-```bash
-kubectl create secret generic slurm-xpaste --from-literal secret-key-base=xxxxxxxxxxxxxxxxxxxxxxxxx --from-literal db-user=postgres --from-literal db-password=postgres --namespace s<номер своего логина>-xpaste-production
-```
-> в secret-key-base xxxxxxxxxxxxx это не плэйсхолдер.
-> Можно так и оставить
-
-### Правка чарта и деплой приложения
-
-> Открываем файл из своего репозитория xpaste
-```bash
-.helm/values.yaml
-```
-> Находим там строчку
-```yaml
-  host: xpaste.s<номер своего логина>.edu.slurm.io
-```
-> и меняем на свой номер логина
-
-> После этого делаем коммит и пуш
-```bash
-git add .
-git commit -m "add CI/CD"
-git push
-```
-
-> Смотрим в интерфейсе Gitlab на пайплайн
-> После успешного завершения открываем в браузере
-```bash
-xpaste.s<номер своего логина>.edu.slurm.io
-```
-
-Должен открыться сайт для шаринга текстовой информации
