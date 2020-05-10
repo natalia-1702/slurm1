@@ -61,14 +61,6 @@ EOF
         $CI_PROJECT_PATH_SLUG-$CI_ENVIRONMENT_NAME
 
     echo
-    echo -e "${GREEN}installing Tiller for project's CI${NC}"
-    helm init \
-        --service-account $CI_PROJECT_PATH_SLUG-$CI_ENVIRONMENT_NAME \
-        --tiller-namespace $CI_PROJECT_PATH_SLUG-$CI_ENVIRONMENT_NAME \
-        --history-max 10 \
-        --wait
-
-    echo
     echo -e "${GREEN}access token for new CI user:${NC}"
     kubectl get secret \
         --namespace $CI_PROJECT_PATH_SLUG-$CI_ENVIRONMENT_NAME \
