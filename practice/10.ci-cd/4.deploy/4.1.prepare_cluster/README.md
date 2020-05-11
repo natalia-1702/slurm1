@@ -49,7 +49,7 @@ kubectl create secret docker-registry xpaste-gitlab-registry --docker-server reg
 Postgres устанавливаем в kubernetes кластер, делается это исключительно в учебных целях. Для установки будем использована утилита helm3. Для установки необходимо выполнить следующую команду, заменив `<номер своего логина>` на номер своего студента:
 ```bash
 $ cd ~/slurm/practice/10.ci-cd/4.deploy/4.1.prepare_cluster/
-$ helm3 install postgresql postgresql --namespace s<номер своего логина>-xpaste-production --atomic --timeout 120s
+$ helm install postgresql postgresql --namespace s<номер своего логина>-xpaste-production --atomic --timeout 120s
 ```
 
 **6. Создание секрета для приложения**
