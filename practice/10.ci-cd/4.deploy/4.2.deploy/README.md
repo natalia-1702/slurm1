@@ -7,7 +7,7 @@
 Для этого скопируем `.gitlab-ci.yml` в проект `xpaste` выполнив команду:
 
 ```bash
-$ cp ~/slurm/practice/10.ci-cd/4.2.deploy/.gitlab-ci.yml ~/xpaste/
+$ cp ~/slurm//practice/10.ci-cd/4.deploy/4.2.deploy.gitlab-ci.yml ~/xpaste/
 ```
 
 **2. Задаем IP kubeapi**
@@ -15,7 +15,7 @@ $ cp ~/slurm/practice/10.ci-cd/4.2.deploy/.gitlab-ci.yml ~/xpaste/
 В файл `.gitlab-ci.yml` необходимо прописать IP адрес своего kubeapi. Для того, что бы его получить выполните команду:
 
 ```bash
-$ kubectel cluster-info
+$ kubectl cluster-info
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -55,7 +55,7 @@ vi ~/xpaste/.helm/values.yaml
 ```bash
 $ cd ~/xpaste
 $ git add .
-$ git commit -am "Init ci/cd. Add build stage."
+$ git commit -am "Add deploy stage."
 $ git push
 ```
 

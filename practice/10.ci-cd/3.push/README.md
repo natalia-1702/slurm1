@@ -14,7 +14,7 @@ $ cp ~/slurm/practice/10.ci-cd/3.push/.gitlab-ci.yml ~/xpaste/
 ```bash
 $ cd ~/xpaste
 $ git add .
-$ git commit -am "Init ci/cd. Add build stage."
+$ git commit -am "Init ci/cd. Add push stage."
 $ git push
 ```
 
