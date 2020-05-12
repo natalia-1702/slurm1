@@ -2,7 +2,7 @@
 > С sbox заходим на master-1
 
 ```bash
-ssh master-1.s000001
+ssh master-1.s<номер своего логина>
 sudo -s
 ```
 
