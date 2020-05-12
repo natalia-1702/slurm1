@@ -16,7 +16,7 @@ my-deployment-5b47d48b58-r95lt   1/1       Running   0          15s       app=my
 
 Для этого выполним команду:
 ```bash
-$ kubectl apply -f practice/1.kube-basics-lecture/7.service/
+$ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/7.service/
 ```
 **3. Проверяем что сервис есть**
 
