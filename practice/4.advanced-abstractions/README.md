@@ -21,7 +21,7 @@ kubectl get pod -o wide
 ```
 Видим
 ```bash
-NAME                  READY   STATUS    RESTARTS   AGE   IP            NODE                               
+NAME                  READY   STATUS    RESTARTS   AGE   IP            NODE
 node-exporter-g5tt8   2/2     Running   0          11s   10.107.32.4   gke-s000-default-pool-41fb7951-ntk8
 node-exporter-jczbm   2/2     Running   0          32s   10.107.32.3   gke-s000-default-pool-41fb7951-4sns
 node-exporter-xpb9f   2/2     Running   0          22s   10.107.32.2   gke-s000-default-pool-41fb7951-lkjn
