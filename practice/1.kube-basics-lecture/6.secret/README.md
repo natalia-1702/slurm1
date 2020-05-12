@@ -4,23 +4,23 @@
 
 Для этого выполним команду:
 ```bash
-$ kubectl create secret generic test --from-literal=test1=asdf
-$ kubectl get secret
-$ kubectl get secret test -o yaml
+kubectl create secret generic test --from-literal=test1=asdf
+kubectl get secret
+kubectl get secret test -o yaml
 ```
 
 **2. Применим наш деплоймент**
 
 Для этого выполним команду:
 ```bash
-$ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/6.secret/
+kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/6.secret/
 ```
 
 **3. Проверяем рузультат**
 
 Для этого выполним команду, подст вместо < RANDOM > нужное значение(`автоподстановка по TAB`):
 ```bash
-$ kubectl describe pod my-deployment-< RANDOM >
+kubectl describe pod my-deployment-< RANDOM >
 ```
 
 Результат должен содержать:

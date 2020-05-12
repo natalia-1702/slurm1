@@ -4,11 +4,11 @@
 
 Для этого выполним команду:
 ```bash
-$ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/1.pod/pod.yaml
+kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/1.pod/pod.yaml
 ```
 Проверим результат для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -36,11 +36,11 @@ vim pod.yaml
 
 Пирменяем изменения, для этого выполним команду:
 ```bash
-$ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/1.pod/pod.yaml
+kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/1.pod/pod.yaml
 ```
 Проверяем результат, для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -52,7 +52,7 @@ my-pod-1  1/1       Running   0          59s
 
 Обновляем версию image в pod my-pod, для этого выполним команду:
 ```bash
-$ kubectl edit pod my-pod
+kubectl edit pod my-pod
 ```
 И заменяем там строку:
 ```diff
@@ -76,5 +76,5 @@ Containers:
 
 Для этого выполним команду:
 ```bash
-$ kubectl delete pod --all
+kubectl delete pod --all
 ```
