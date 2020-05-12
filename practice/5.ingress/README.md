@@ -21,29 +21,30 @@ kubectl apply -f clusterip.yaml
 kubectl apply -f nodeport.yaml
 ```
 
-## ingress для nginx контроллера
+# Ingress для nginx контроллера
 ```
 kubectl apply -f nginx-ingress.yaml
 kubectl get ing
 ```
 
 ```
-curl my.s000000.edu.slurm.io
+curl my.sXXXXXX.edu.slurm.io <- Подставляем свой номер логина
 ```
 
-> Правим в файле host-ingress.yaml 's000000' на свой номер студента
+Правим в файле host-ingress.yaml 'sXXXXXX' на свой номер студента
+
 ```
 kubectl apply -f host-ingress.yaml
 kubectl get ing
 ```
 
-> работает
+Проверяем
 ```
-curl my.s000000.edu.slurm.io
+curl my.sXXXXXX.edu.slurm.io
 ```
-> отдает 404
+Запрос на другой домен отдает 404
 ```
-curl notmy.s000000.edu.slurm.io
+curl notmy.sXXXXXX.edu.slurm.io
 ```
 
 # Переходим к установке cert-manager

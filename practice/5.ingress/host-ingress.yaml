@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: my.s000000.edu.slurm.io
+  - host: my.sXXXXXX.edu.slurm.io
     http:
       paths:
       - backend:
