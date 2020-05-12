@@ -4,7 +4,7 @@
 
 Для этого выполним команду:
 ```bash
-$ kubectl get po --show-labels
+kubectl get po --show-labels
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -16,13 +16,13 @@ my-deployment-5b47d48b58-r95lt   1/1       Running   0          15s       app=my
 
 Для этого выполним команду:
 ```bash
-$ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/7.service/
+kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/7.service/
 ```
 **3. Проверяем что сервис есть**
 
 Для этого выполним команду:
 ```bash
-$ kubectl get service
+kubectl get service
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -33,7 +33,7 @@ my-service   ClusterIP   10.108.197.224   <none>        80/TCP    2s
 
 Для этого выполним команду:
 ```bash
-$ kubectl get endpoints
+kubectl get endpoints
 ```
 Результат должен быть примерно следующим:
 ```
@@ -44,7 +44,7 @@ my-service   172.17.0.6:80,172.17.0.7:80   1m
 
 Для этого выполним команду:
 ```
-$ kubectl get pod -o wide
+kubectl get pod -o wide
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -56,7 +56,7 @@ my-deployment-5b47d48b58-r95lt   1/1       Running   0          3m        172.17
 
 Для этого выполним команду:
 ```bash
-$ kubectl run -t -i --rm --image amouat/network-utils test bash
+kubectl run -t -i --rm --image amouat/network-utils test bash
 ```
 **7. Дальше уже из этого пода выполняем**
 

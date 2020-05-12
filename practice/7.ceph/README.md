@@ -421,3 +421,5 @@ yum install -y attr
 
 getfattr -n ceph.quota.max_bytes <каталог-с-данными>
 ```
+
+## Возвращаемся в advanced abstraction, statefulset.

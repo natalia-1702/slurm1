@@ -4,13 +4,13 @@
 
 Для этого выполним команду:
 ```bash
-$ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/3.deployment/
+kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/3.deployment/
 ```
 **2. Проверка результата**
 
 Проверяем список pods для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примрено таким:
 ```bash
@@ -20,7 +20,7 @@ my-deployment-7c768c95c4-lx9bm   0/1       ContainerCreating   0          2s
 ```
 Проверяем список replicaset для этого выполним команду:
 ```bash
-$ kubectl get replicaset
+kubectl get replicaset
 ```
 Результат должен быть примрено таким:
 ```bash
@@ -32,11 +32,11 @@ my-deployment-7c768c95c4   2         2         2         1m
 Обновляем версию image для container в deployment my-deployment. Для этого выполним команду: 
 
 ```bash
-$ kubectl set image deployment my-deployment nginx=nginx:1.13
+kubectl set image deployment my-deployment nginx=nginx:1.13
 ```
 Проверяем результат, для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примрено таким:
 ```bash
@@ -54,7 +54,7 @@ my-deployment-685879478f-gw7sq   1/1       Running   0          33s
 ```
 Проверяем что в новых pod новый image, Для этого выполним команду, заменив имя pod на имя вашего pod(``можно воспользоваться автоподстановкой по TAB``):
 ```bash
-$ kubectl describe pod my-deployment-685879478f-7t6ws
+kubectl describe pod my-deployment-685879478f-7t6ws
 ```
 Результат должен быть примрено таким:
 ```bash
@@ -62,7 +62,7 @@ $ kubectl describe pod my-deployment-685879478f-7t6ws
 ```
 Проверяем что стало с replicaset, для этого выполним команду:
 ```bash
-$ kubectl get replicaset
+kubectl get replicaset
 ```
 Результат должен быть примрено таким:
 ```bash
@@ -72,5 +72,5 @@ my-deployment-7c768c95c4   0         0         0         7m
 ```
 **4. Чистим за собой кластер**
 ```bash
-$ kubectl delete deployment --all
+kubectl delete deployment --all
 ```
