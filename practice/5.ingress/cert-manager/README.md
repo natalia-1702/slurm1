@@ -23,6 +23,7 @@ helm install \
 kubectl apply -f test-resources.yaml
 ```
 
+Если возникает ошибка `Error from server (InternalError)`, то применяем манифест еще раз.
 ## Убеждаемся, что сертификат создан
 
 > сертификат
