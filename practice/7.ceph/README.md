@@ -3,7 +3,7 @@
 > С sbox заходим на master-1
 
 ```bash
-ssh master-1.s000001
+ssh master-1.s<номер вашего логина>
 sudo -s
 ```
 > Клонируем сценарий автоматизированной установки ceph в каталог /srv
@@ -37,7 +37,7 @@ sh  _deploy_cluster.sh
 > С sbox заходим на node-1
 
 ```bash
-ssh node-1.s000001
+ssh node-1.s<номер вашего логина>
 sudo -s
 ```
 > Проверяем что цеф живой
