@@ -15,11 +15,11 @@ vim ingress.yaml
 
 Создаем ingress
 ```bash
-$ kubectl apply -f ingress.yaml
+kubectl apply -f ingress.yaml
 ```
 Проверяем, что ингресс создался
 ```bash
-$ kubectl get ingress
+kubectl get ingress
 ```
 Видим что-то типа
 ```bash
@@ -43,7 +43,7 @@ my-deployment-5b47d48b58-r95lt
 ```
 Чистим за собой кластер
 ```bash
-$ kubectl delete all --all
-$ kubectl delete configmap --all
-$ kubectl delete ingress --all
+kubectl delete all --all
+kubectl delete configmap --all
+kubectl delete ingress --all
 ```

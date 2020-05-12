@@ -4,11 +4,11 @@
 
 Для этого выполним команду:
 ```bash
-$ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/2.replicaset/replicaset.yaml
+kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/2.replicaset/replicaset.yaml
 ```
 Проверим результат для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -21,11 +21,11 @@ my-replicaset-z7rwm   0/1       ContainerCreating   0          2s
 
 Для этого выполним команду:
 ```bash
-$ kubectl scale replicaset my-replicaset --replicas 3
+kubectl scale replicaset my-replicaset --replicas 3
 ```
 Проверим результат для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -38,11 +38,11 @@ my-replicaset-z7rwm   1/1       Running             0          2m
 
 Для этого выполним команду подставив имя своего pod(``можно воспользоваться автоподстановкой по TAB``):
 ```bash
-$ kubectl delete pod my-replicaset-pbtdm
+kubectl delete pod my-replicaset-pbtdm
 ```
 Проверим результат для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -73,11 +73,11 @@ spec:
 ```
 Создаем дополнительный pod, для этого выполним команду:
 ```bash
-$ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/2.replicaset/pod.yaml
+kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/2.replicaset/pod.yaml
 ```
 Проверяем результа для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -91,11 +91,11 @@ my-replicaset-szqgz   1/1       Running       0          6m
 
 Для этого выоплним команду:
 ```bash
-$ kubectl set image replicaset my-replicaset nginx=nginx:1.13
+kubectl set image replicaset my-replicaset nginx=nginx:1.13
 ```
 Проверяем результа для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -106,7 +106,7 @@ my-replicaset-szqgz   1/1       Running       0          6m
 ```
 И проверяем сам replicaset для этого выполним команду:
 ```bash
-$ kubectl describe replicaset my-replicaset
+kubectl describe replicaset my-replicaset
 ```
 В результате находим строку Image и видим:
 ```bash
@@ -116,7 +116,7 @@ $ kubectl describe replicaset my-replicaset
 ```
 Проверяем версию image в pod для этого выполним команду, подставив имя своего pod(``можно воспользоваться автоподстановкой по TAB``):
 ```bash
-$ kubectl describe pod my-replicaset-55qdj
+kubectl describe pod my-replicaset-55qdj
 ```
 Видим что версия имаджа в поде не изменилась:
 ```bash
@@ -126,11 +126,11 @@ $ kubectl describe pod my-replicaset-55qdj
 ```
 Помогаем поду, для этого выполним команду, подставив имя своего pod(``можно воспользоваться автоподстановкой по TAB``):
 ```bash
-$ kubectl delete po my-replicaset-55qdj
+kubectl delete po my-replicaset-55qdj
 ```
 Проверяем результа для этого выполним команду:
 ```bash
-$ kubectl get pod
+kubectl get pod
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -142,7 +142,7 @@ my-replicaset-szqgz   1/1       Running             0          14m
 ```
 Проверяем версию имаджа в новом pod для этого выполним команду, подставив имя своего pod(``можно воспользоваться автоподстановкой по TAB``):
 ```bash
-$ kubectl describe pod my-replicaset-cwjlf
+kubectl describe pod my-replicaset-cwjlf
 ```
 Результат должен быть примерно следующим:
 ```bash
@@ -152,5 +152,5 @@ $ kubectl describe pod my-replicaset-cwjlf
 
 Для этого выполним команду:
 ```bash
-$ kubectl delete replicaset --all
+kubectl delete replicaset --all
 ```
