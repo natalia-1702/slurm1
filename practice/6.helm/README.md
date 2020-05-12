@@ -1,31 +1,96 @@
-## Все работы проводим с первого мастера.
+### ВНИМАНИЕ!
+
+**Все работы проводим на первом мастере!**
 
 ### установка Helm
 
 ```bash
 yum install helm -y
+```
 
-kubectl create serviceaccount tiller --namespace kube-system
-kubectl create clusterrolebinding tiller --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+### Подключаем repo и смотрим kube-ops-view
 
-helm init --service-account tiller --history-max 10
+```
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo update
+
+helm search hub kube-ops
+helm show values stable/kube-ops-view > values.yaml
+
+```
+
+Правим `values.yaml`:
+
+```
+ingress:
+  enabled: true
+...
+hostname: kube-ops.sXXXXXX.edu.slurm.io
+...
+rbac:
+  create: true
+...
+```
+где `sXXXXXX` - ваш номер логина
+
+Устанавливаем kube-ops-view:
+
+```
+helm install ops-view stable/kube-ops-view --namespace kube-system -f values.yaml
+```
+
+Переходим в браузер в Инкогнито режим и заходим на `http://kube-ops.sXXXXXX.edu.slurm.io/`
+
+Удаляем чарт:
+
+```
+helm delete ops-view --namespace kube-system
+```
+
+### Посмотрим что внутри чарта:
+
+```
+helm pull stable/kube-ops-view
+
+tar -zxvf kube-ops-view-1.1.4.tgz
+
+cd kube-ops-view/
 ```
 
 ### Helm Cheatsheet
 
 Поиск чартов
 
-```bash
-helm search
+```
+helm search hub
 ```
 
 Получение дефолтных values
 
-```bash
-helm inspect values repo/chart > values.yaml
+```
+helm show values repo/chart > values.yaml
 ```
 
 Установка чарта в кластер
-```bash
-helm upgrade --install release-name repo/chart [--atomic] [--namespace namespace]
+
 ```
+helm install release-name repo/chart [--atomic] [--namespace namespace]
+```
+
+Локально отрендерить чарт
+
+```
+helm template /path/to/chart
+```
+
+### Если отстали по практике на каком-то месте, то смотрим ```summary_file.yaml```
+
+---
+
+**ДОМАШНЯЯ РАБОТА:**
+
+- Перейти в папку `homework`
+- Запустить deployment из файла `bad_deployment.yaml`
+- Исправить все найденные ошибки и сделать так, чтобы все pod'ы были в состоянии `Running 1/1`
+
+Ответ-шпаргалка находится в файле `bad_deployment.yaml_otvet`

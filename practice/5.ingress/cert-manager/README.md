@@ -5,7 +5,7 @@ cd slurm/practice/5.ingress/cert-manager
 
 # Устанавливаем cert-manager, выпускаем тестовый сертификат
 ```
-kubectl --validate=false apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.11/deploy/manifests/00-crds.yaml
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.14.2/cert-manager.crds.yaml
 
 kubectl create namespace cert-manager
 
@@ -13,12 +13,9 @@ helm repo add jetstack https://charts.jetstack.io
 helm repo update
 
 helm install \
- --name cert-manager \
- --namespace cert-manager \
- --version v0.11.0 \
- --set ingressShim.defaultIssuerName=letsencrypt \
- --set ingressShim.defaultIssuerKind=ClusterIssuer \
- jetstack/cert-manager
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v0.14.2
 ```
 
 ## Проверяем работу, выпустив самоподписанный сертификат
@@ -71,7 +68,7 @@ kubectl get clusterissuers letsencrypt -o yaml
 ```
 
 # Добавляем в ingress информацию о TLS
-> Правим в файле tls-ingress.yaml 's000000' на свой номер студента
+> Правим в файле tls-ingress.yaml 'sXXXXXX' на свой номер студента
 ```
 kubectl apply -f tls-ingress.yaml -n default
 ```
@@ -86,16 +83,12 @@ kubectl get certificate my-tls -o yaml
 kubectl get secret my-tls -o yaml
 ```
 
-## Убедились что сертификат от issuer: CN=Fake LE Intermediate X1. Не забываем править s000000 на свой номер студента
-
-```
-curl https://my.s000000.edu.slurm.io -k -v
-```
+## Зайдем в браузер по адресу https://my.sXXXXXX.edu.slurm.io и убедимся что сертификат от issuer: CN=Fake LE Intermediate X1. Не забываем править sXXXXXX на свой номер студента
 
 # Удаляем cert-manager
 
 ```
-helm delete --purge cert-manager
+helm delete cert-manager --namespace cert-manager
 ```
 
 # Вернулись назад
