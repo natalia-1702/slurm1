@@ -2,7 +2,7 @@
 
 Создаем deployment с ресурсами и пробами
 ```bash
-kubectl apply -f deployment-with-stuff.yaml
+kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/4.resources-and-probes/
 ```
 Смотрим что получилось
 ```bash
