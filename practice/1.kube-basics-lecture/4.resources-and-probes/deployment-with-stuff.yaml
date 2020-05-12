@@ -1,5 +1,5 @@
 ---
-# file: practice/1.kube-basics-lecture/4.resources-and-probes/deploment-with-stuff.yaml
+# file: practice/1.kube-basics-lecture/4.resources-and-probes/deployment-with-stuff.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
