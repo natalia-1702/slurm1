@@ -51,5 +51,5 @@ curl notmy.sXXXXXX.edu.slurm.io
 
 ```
 cd cert-manager
-cat instruction.md
+cat README.md
 ```
