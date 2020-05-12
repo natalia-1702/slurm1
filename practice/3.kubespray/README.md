@@ -79,12 +79,6 @@ kubectl get pod -A
 ```
 > покажет, что все поды в статусе Running
 
-> После успешной установки требуется "доработка напильником"
-> Удаляем лейбл node с ingress-1
-```bash
-kubectl label node ingress-1.s<номер своего логина>.slurm.io\node-role.kubernetes.io/node-
-```
-
 ## Добавление kubectl bash completion
 
 ```bash
