@@ -63,7 +63,7 @@ vi _deploy_cluster.sh
 > например  sh  _deploy_cluster.sh s000001
 
 ```bash
-sh  _deploy_cluster.sh <свой логин>
+sh  _deploy_cluster.sh s<номер своего логина>
 ```
 > Следим за выводом на экран. ждем отчета об успешном завершении
 > Если при завершении есть красные надписи fail= смотрим вывод, ищем ошибки в инвентаре.
@@ -82,7 +82,7 @@ kubectl get pod -A
 > После успешной установки требуется "доработка напильником"
 > Удаляем лейбл node с ingress-1
 ```bash
-kubectl label node ingress-1.s000000.slurm.io\node-role.kubernetes.io/node-
+kubectl label node ingress-1.s<номер своего логина>.slurm.io\node-role.kubernetes.io/node-
 ```
 
 ## Добавление kubectl bash completion
