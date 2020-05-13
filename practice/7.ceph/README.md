@@ -400,7 +400,7 @@ kubectl describe pod названиепода
 curl -i fileshare.s<номер своего логина>.edu.slurm.io/files/ -T configmap.yaml
 ```
 
-Идем на node-1 и в каталоге /mnt/cephfs/pvc-........ убеждаемся, что там появился файл configmap.yaml
+Идем на node-1 и в каталоге /mnt/cephfs/volumes/csi/csi-vol-.... убеждаемся, что там появился файл configmap.yaml
 
 
 > Пробуем как работает resize
