@@ -143,6 +143,7 @@ AQCO9NJbhYipKRAAMqZsnqqS/T8OYQX20xIa9A==
 > Если секрет был уже создан ранее и вы хотите его изменить, самый простой способ - удалить и создать заново
 
 ```bash
+cd ~/slurm/practice/7.ceph/cephfs
 vi secret.yaml
 # Заносим значение ключа в 
 # userKey: AQBRYK1eo++dHBAATnZzl8MogwwqP/7KEnuYyw==
