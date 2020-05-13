@@ -378,7 +378,7 @@ mount /mnt/cephfs
 > Меняем в каталоге fileshare манифесты:
 
 ```bash
-cd fileshare
+cd ~/slurm/practice/7.ceph/fileshare
 ```
 в ingress.yaml host: номер своего студента
 
