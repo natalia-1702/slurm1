@@ -77,7 +77,8 @@ data-rabbitmq-0   Bound    pvc-d9030631-496e-11e9-96e5-4201ac101193   2Gi       
 data-rabbitmq-1   Bound    pvc-01c40ac5-496f-11e9-96e5-4201ac101193   2Gi        RWO            standard       7m
 data-rabbitmq-2   Bound    pvc-3332550d-496f-11e9-96e5-4201ac101193   2Gi        RWO            standard       5m
 ```
-Проверяем сервис
+**Проверяем сервис**
+
 Запускаем под для тестов
 ```bash
 kubectl run -t -i --rm --image amouat/network-utils test bash
@@ -158,7 +159,8 @@ Hello from the Kubernetes cluster
 ```bash
 kubectl delete job hello
 ```
-Проверяем работу параметра backoffLimit
+**Проверяем работу параметра backoffLimit**
+
 Открываем файл job.yaml
 Находим командy выполняющуюся в поде
 ```yaml
@@ -191,7 +193,7 @@ hello   0/1           27s        27s
 ```bash
 kubectl get pod
 ```
-Видим поды, созданный джобой
+Видим поды, созданные джобой
 ```bash
 NAME          READY   STATUS   RESTARTS   AGE
 hello-5nvqf   0/1     Error    0          22m
@@ -203,7 +205,7 @@ hello-rl984   0/1     Error    0          22m
 ```bash
 kubectl describe job hello
 ```
-Видим что backoffLimit сработал
+Видим, что backoffLimit сработал
 ```bash
   Warning  BackoffLimitExceeded  23m   job-controller  Job has reached the specified backoff limit
 ```
@@ -211,7 +213,8 @@ kubectl describe job hello
 ```bash
 kubectl delete job hello
 ```
-Проверяем работу параметра activeDeadlineSeconds
+**Проверяем работу параметра activeDeadlineSeconds**
+
 Открываем файл job.yaml
 Находим командy, выполняющуюся в поде
 ```yaml
@@ -253,7 +256,7 @@ hello-bt6g6   1/1     Running   0          5s
 ```bash
 kubectl describe job hello
 ```
-Видим что activeDeadlineSeconds сработал
+Видим, что activeDeadlineSeconds сработал
 ```bash
   Warning  DeadlineExceeded  2m17s  job-controller  Job was active longer than specified deadline
 ```

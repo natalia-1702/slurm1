@@ -29,7 +29,7 @@ my-deployment-57fff9c845-h8bbw   1/1       Running   0          8m
 my-deployment-845d88fdcf-9bd29   0/1       Pending   0          2s
 my-deployment-845d88fdcf-mprfk   0/1       Pending   0          2s
 ```
-Смотрим почему поды не могут создаться
+Смотрим, почему поды не могут создаться
 ```bash
 kubectl describe po my-deployment-845d88fdcf-9bd29
 ```

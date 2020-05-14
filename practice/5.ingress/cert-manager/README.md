@@ -53,7 +53,7 @@ kubectl delete ns cert-manager-test
 kubectl create secret generic stage-issuer-account-key --from-file=./tls.key --namespace=cert-manager
 ```
 
-# Проверяем что secret создался
+# Проверяем, что secret создался
 ```
 kubectl describe secrets -n cert-manager stage-issuer-account-key
 ```
@@ -63,7 +63,7 @@ kubectl describe secrets -n cert-manager stage-issuer-account-key
 kubectl apply -f clusterissuer-stage.yaml
 ```
 
-# Проверяем что наш clusterissuer создался:
+# Проверяем, что наш clusterissuer создался:
 ```
 kubectl get clusterissuers letsencrypt -o yaml
 ```
@@ -74,17 +74,17 @@ kubectl get clusterissuers letsencrypt -o yaml
 kubectl apply -f tls-ingress.yaml -n default
 ```
 
-## посмотрели на сертификат
+## Посмотрели на сертификат
 ```
 kubectl get certificate my-tls -o yaml
 ```
 
-## посмотрели на секрет
+## Посмотрели на секрет
 ```
 kubectl get secret my-tls -o yaml
 ```
 
-## Зайдем в браузер по адресу https://my.sXXXXXX.edu.slurm.io и убедимся что сертификат от issuer: CN=Fake LE Intermediate X1. Не забываем править sXXXXXX на свой номер студента
+## Зайдем в браузер по адресу https://my.sXXXXXX.edu.slurm.io и убедимся, что сертификат от issuer: CN=Fake LE Intermediate X1. Не забываем править sXXXXXX на свой номер студента
 
 # Удаляем cert-manager
 

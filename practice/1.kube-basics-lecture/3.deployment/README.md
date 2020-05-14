@@ -8,21 +8,21 @@ kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/3.deployment/
 ```
 **2. Проверка результата**
 
-Проверяем список pods для этого выполним команду:
+Проверяем список pods, для этого выполним команду:
 ```bash
 kubectl get pod
 ```
-Результат должен быть примрено таким:
+Результат должен быть примерно таким:
 ```bash
 NAME                             READY     STATUS              RESTARTS   AGE
 my-deployment-7c768c95c4-47jxz   0/1       ContainerCreating   0          2s
 my-deployment-7c768c95c4-lx9bm   0/1       ContainerCreating   0          2s
 ```
-Проверяем список replicaset для этого выполним команду:
+Проверяем список replicaset, для этого выполним команду:
 ```bash
 kubectl get replicaset
 ```
-Результат должен быть примрено таким:
+Результат должен быть примерно таким:
 ```bash
 NAME                       DESIRED   CURRENT   READY     AGE
 my-deployment-7c768c95c4   2         2         2         1m
@@ -38,7 +38,7 @@ kubectl set image deployment my-deployment nginx=nginx:1.13
 ```bash
 kubectl get pod
 ```
-Результат должен быть примрено таким:
+Результат должен быть примерно таким:
 ```bash
 NAME                             READY     STATUS              RESTARTS   AGE
 my-deployment-685879478f-7t6ws   0/1       ContainerCreating   0          1s
@@ -52,11 +52,11 @@ NAME                             READY     STATUS    RESTARTS   AGE
 my-deployment-685879478f-7t6ws   1/1       Running   0          33s
 my-deployment-685879478f-gw7sq   1/1       Running   0          33s
 ```
-Проверяем что в новых pod новый image, Для этого выполним команду, заменив имя pod на имя вашего pod(``можно воспользоваться автоподстановкой по TAB``):
+Проверяем что в новых pod новый image. Для этого выполним команду, заменив имя pod на имя вашего pod(``можно воспользоваться автоподстановкой по TAB``):
 ```bash
 kubectl describe pod my-deployment-685879478f-7t6ws
 ```
-Результат должен быть примрено таким:
+Результат должен быть примерно таким:
 ```bash
     Image:          nginx:1.13
 ```
@@ -64,7 +64,7 @@ kubectl describe pod my-deployment-685879478f-7t6ws
 ```bash
 kubectl get replicaset
 ```
-Результат должен быть примрено таким:
+Результат должен быть примерно таким:
 ```bash
 NAME                       DESIRED   CURRENT   READY     AGE
 my-deployment-685879478f   2         2         2         2m

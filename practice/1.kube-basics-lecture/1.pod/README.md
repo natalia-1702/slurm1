@@ -6,7 +6,7 @@
 ```bash
 kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/1.pod/pod.yaml
 ```
-Проверим результат для этого выполним команду:
+Проверим результат, для чего выполним команду:
 ```bash
 kubectl get pod
 ```
@@ -34,7 +34,7 @@ vim pod.yaml
 ```
 Сохраняем и выходим. Для vim нужно нажать `:wq<Enter>`
 
-Пирменяем изменения, для этого выполним команду:
+Применяем изменения, для этого выполним команду:
 ```bash
 kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/1.pod/pod.yaml
 ```
@@ -50,7 +50,7 @@ my-pod-1  1/1       Running   0          59s
 ```
 **3. Обновляем версию image**
 
-Обновляем версию image в pod my-pod, для этого выполним команду:
+Обновляем версию image в pod `my-pod`, для этого выполним команду:
 ```bash
 kubectl edit pod my-pod
 ```
@@ -59,7 +59,7 @@ kubectl edit pod my-pod
 -  - image: nginx:1.12
 +  - image: nginx:1.13
 ```
-Проверяем результа, для этого выполним команду:
+Проверяем результат, для этого выполним команду:
 ```bash
 kubectl describe po my-pod
 ```

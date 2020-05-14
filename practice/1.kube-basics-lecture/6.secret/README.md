@@ -16,9 +16,9 @@ kubectl get secret test -o yaml
 kubectl apply -f ~/slurm/practice/1.kube-basics-lecture/6.secret/
 ```
 
-**3. Проверяем рузультат**
+**3. Проверяем результат**
 
-Для этого выполним команду, подст вместо < RANDOM > нужное значение(`автоподстановка по TAB`):
+Для этого выполним команду, подставив вместо < RANDOM > нужное значение(`автоподстановка по TAB`):
 ```bash
 kubectl describe pod my-deployment-< RANDOM >
 ```

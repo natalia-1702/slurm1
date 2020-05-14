@@ -11,7 +11,7 @@ sudo -s
 cd /srv
 git clone git@gitlab.slurm.io:slurm/ceph-nautilus.git
 ```
-> Устанавливаем ansible и зависимости
+> Переходим в каталог со сценарием
 ```bash
 cd ceph-nautilus
 ```
@@ -27,7 +27,7 @@ sh  _deploy_cluster.sh
 `health: HEALTH_OK`
 
 > Если сообщение не HEALTH_OK - есть вероятность, что
-не все компоненты успели запустится, проверим позже на node-1.
+не все компоненты успели запуститься, проверим позже на node-1.
 
 > Далее будем работать на двух серверах
 > node-1 и master-1
@@ -66,7 +66,7 @@ helm repo add ceph-csi https://ceph.github.io/csi-charts
 mkdir -p /srv/ceph
 cd /srv/ceph
 
-helm inspect values ceph-csi/ceph-csi-rbd --version 2.1.0 >cephrbd.yml
+helm inspect values ceph-csi/ceph-csi-rbd --version 2.1.0 > cephrbd.yml
 ```
 
 > Заполняем переменные в cephrbd.yml
@@ -89,7 +89,7 @@ ceph mon dump
 > Правим файл cephrbd.yml
 > Заносим свои значение clusterID, и адреса мониторов.
 > включаем создание политик PSP, и увеличиваем таймаут на создание дисков
-> Список изменений в файле cephrbd.yml. Опции в разделах nodeplugin и provisioner уже есть в файле, их надо исправить так как показано ниже.
+> Список изменений в файле cephrbd.yml. Опции в разделах nodeplugin и provisioner уже есть в файле, их надо исправить так, как показано ниже.
 
 ```
 csiConfig:
@@ -110,7 +110,7 @@ provisioner:
     enabled: true
 ```
 
-> При необходимости можно сверится с файлом rbd/cephrbd-values-example.yml
+> При необходимости можно свериться с файлом rbd/cephrbd-values-example.yml
 
 > Устанавливаем чарт
 
@@ -139,7 +139,7 @@ ceph auth get-key client.rbdkube
 > вывод:
 AQCO9NJbhYipKRAAMqZsnqqS/T8OYQX20xIa9A==
 
-> выполняем на master-1, подставляем значение ключа в манифест секрета секрета
+> выполняем на master-1, подставляем значение ключа в манифест секрета.
 > Если секрет был уже создан ранее и вы хотите его изменить, самый простой способ - удалить и создать заново
 
 ```bash
@@ -158,7 +158,7 @@ kubectl apply -f secret.yaml
 > Выполняем на node-1
 
 ```bash
-# Получам id кластера ceph
+# Получаем id кластера ceph
 
 ceph fsid
 ```
@@ -214,7 +214,7 @@ kubectl get pv
 kubectl get pvc
 ```
 
-> У pvc размер не изменился, и если посмтреть его манифест в yaml
+> У pvc размер не изменился, и если посмотреть его манифест в yaml
 
 ```bash
 kubectl get pvc rbd-pvc -o yaml
@@ -223,7 +223,7 @@ kubectl get pvc rbd-pvc -o yaml
 > То увидим сообщение message: Waiting for user to (re-)start a pod to finish file system resize of volume on node.
 > type: FileSystemResizePending
 > Необходимо смонтировать том, для того чтобы увеличить на нем файловую систему. А у нас этот PVC/PV не используется никаким подом.
-> Создаем под, который использует этот PVC/PV, и смотри на размер, указанный в pvc
+> Создаем под, который использует этот PVC/PV, и смотрим на размер, указанный в pvc
 
 ```bash
 kubectl apply -f pod.yaml
@@ -259,7 +259,7 @@ ceph mon dump
 
 > Правим файл cephfs.yml
 > Заносим свои значение clusterID, и адреса мониторов.
-> включаем создание политик PSP, и увеличиваем таймаут на создание дисков
+> Включаем создание политик PSP и увеличиваем таймаут на создание дисков
 
 > !!! Внимание, адреса мониторов указываются в простой форме адреc:порт, потому что они передаются в модуль ядра для монтирования cephfs на узел.
 > !!! А модуль ядра еще не умеет работать с протоколом мониторов v2
@@ -285,7 +285,7 @@ provisioner:
     enabled: true
 ```
 
-> При необходимости можно сверится с файлом cephfs/cephfs-values-example.yml
+> При необходимости можно свериться с файлом cephfs/cephfs-values-example.yml
 
 > Устанавливаем чарт
 
@@ -310,7 +310,7 @@ ceph auth get-key client.admin
 > вывод:
 AQCO9NJbhYipKRAAMqZsnqqS/T8OYQX20xIa9A==
 
-> выполняем на master-1, подставляем значение ключа в манифест секрета секрета
+> Выполняем на master-1, подставляем значение ключа в манифест секрета
 > Если секрет был уже создан ранее и вы хотите его изменить, самый простой способ - удалить и создать заново
 
 ```bash
@@ -329,7 +329,7 @@ kubectl apply -f secret.yaml
 > Выполняем на node-1
 
 ```bash
-# Получам id кластера ceph
+# Получаем id кластера ceph
 
 ceph fsid
 ```
@@ -345,7 +345,7 @@ kubectl apply -f storageclass.yaml
 ```
 
 > Проверяем как работает.
-> Создаем pvc, и проверем статус и наличие pv
+> Создаем pvc, и проверяем статус и наличие pv
 
 ```bash
 kubectl apply -f pvc.yaml
@@ -364,7 +364,7 @@ mkdir -p /mnt/cephfs
 # Создаем файл с ключом администратора
 ceph auth get-key client.admin >/etc/ceph/secret.key
 
-# Добавляем запсиь в /etc/fstab
+# Добавляем запись в /etc/fstab
 # !! Изменяем ip адрес на адрес узла node-1
 echo "172.<xx>.<yyy>.6:6789:/ /mnt/cephfs ceph name=admin,secretfile=/etc/ceph/secret.key,noatime,_netdev    0       2">>/etc/fstab
 
