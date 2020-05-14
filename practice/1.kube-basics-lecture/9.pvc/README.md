@@ -6,5 +6,4 @@
 kubectl apply -f pvc.yml
 
 kubectl get pvc
-kubectl get pv
 ```
