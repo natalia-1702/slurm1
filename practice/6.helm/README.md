@@ -31,7 +31,7 @@ rbac:
   create: true
 ...
 ```
-где `sXXXXXX` - ваш номер логина
+где `sXXXXXX` - ваш номер студента
 
 Устанавливаем kube-ops-view:
 
@@ -47,7 +47,7 @@ helm install ops-view stable/kube-ops-view --namespace kube-system -f values.yam
 helm delete ops-view --namespace kube-system
 ```
 
-### Посмотрим что внутри чарта:
+### Посмотрим, что внутри чарта:
 
 ```
 helm pull stable/kube-ops-view

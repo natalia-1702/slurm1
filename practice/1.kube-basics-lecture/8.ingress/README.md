@@ -11,7 +11,7 @@ vim ingress.yaml
 ```
 на свой номер логина
 
-> Если вы вошли в vim и не знаете что делать, то нажимаете :wq<Enter>
+> Если вы вошли в vim и не знаете что делать, то нажимайте :wq<Enter>
 
 Создаем ingress
 ```bash
@@ -30,7 +30,7 @@ my-ingress   s000001.k8s.slurm.io             80        1s
 ```bash
 curl -i s<номер своего логина>.k8s.slurm.io
 ```
-В ответ видим выданный нам nginxом hostname пода
+В ответ видим выданный нам nginx'ом hostname пода
 ```bash
 HTTP/1.1 200 OK
 Server: nginx/1.12.2
