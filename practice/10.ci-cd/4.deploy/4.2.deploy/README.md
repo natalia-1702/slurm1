@@ -7,7 +7,7 @@
 Для этого скопируем `.gitlab-ci.yml` в проект `xpaste`, выполнив команду:
 
 ```bash
-$ cp ~/slurm//practice/10.ci-cd/4.deploy/4.2.deplo/.gitlab-ci.yml ~/xpaste/
+$ cp ~/slurm//practice/10.ci-cd/4.deploy/4.2.deploy/.gitlab-ci.yml ~/xpaste/
 ```
 
 **2. Задаем IP kubeapi**
